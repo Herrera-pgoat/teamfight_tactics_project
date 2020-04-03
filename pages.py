@@ -26,11 +26,13 @@ def createAccount():
 def findUser(username):
     return 'username {}'.format(username)
 
+#This is a helper function that will give the findUser the argument it needs ot work
 @bp.route('/find/help',methods=['GET','POST'])
 def findUserHelper():
     if request.method =='POST':
         name = request.form['username']
-        #I send potato as the name
+        #I send the username they typed as the name
         return redirect(url_for('.findUser',username=name))
+    #if they just typed this /find/help in they would get cofeebean which I think is me :D
     else:
         return redirect(url_for('.findUser',username='cofeebean'))
