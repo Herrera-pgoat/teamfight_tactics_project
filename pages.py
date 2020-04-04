@@ -112,14 +112,8 @@ def findUser(username):
     #calling a function that gets all the informatio about units
     unit_info_list = unit_info_helper(user_game_info)
     #now unit_info_list has all relevent information about the units I had in this game
-
-    #getting a list of the strings I will use to get the pictures
-    unit_picture_list = list()
-    for unit in unit_info_list:
-        #here I should get all characters after the first 5ish characters and send a list of them to the html and then add all the pictures
-        word = ( unit[0][5:].lower() ) + '.png'
-        unit_picture_list.append(word)
-    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list,pictures=unit_picture_list)
+    
+    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list)
 
 
 #This is a helper function that will give the findUser the argument it needs ot work

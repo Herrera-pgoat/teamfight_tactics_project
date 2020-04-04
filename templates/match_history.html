@@ -20,10 +20,23 @@
         {% endfor %}
        </div>
   </div>
-  <!--Printing out the picture of every champion -->
-  {% for picture in pictures %}
-    <img src="{{url_for('static', filename='images/champions/'+picture)}}"  alt={{picture}} align="middle" />
-  {% endfor %}
+  <!--Printing out the picture of every champion. Getting their picture from the name of the unit in the team -->
+  <span class="row">
+    {% for unit in team %}
+    <!--This is position relative that way the position absolute uses this tag as its closest positioned relative. So the absolute tag will be posted with this tag as the absolute -->
+      <span class="ml-4" style="position:relative;">
+      <!-- I am checking if the name from the 5th charcater up is in the picture name-->
+      <img class="" src="{{url_for('static', filename='images/champions/'+lower(unit[0][5:] + '.png'))}}" alt={{unit[0]}} align="middle" style="{{border_color(unit[-2])}};border-radius: 0.25rem;z-index:1" >
+        <!--I am printing out a picture of the champion soon to be replaced with a star for each level the champion was -->
+        <!--The z-index tells us we want it to appear above anything with a lower z index. Like in front of not above -->
+        <!--I only want as many stars to appear as there are levels the champion has-->
+        <!-- This seems like a convoluted solution for my problem But I am going with it for now -->
+        {% for i in range(0, (unit[-1]) ) %}
+          <img src="{{url_for('static', filename='images/champions/'+lower(unit[0][5:] + '.png'))}}"  alt={{unit[0]}} align="middle" height="20" width="20" style="left:{{5 + 20*i}}px;top:50px;position:absolute;z-index:2;">
+        {% endfor %}
+        </span>
+    {% endfor %}
+  </span>
 </div>
 
 {% endblock %}
