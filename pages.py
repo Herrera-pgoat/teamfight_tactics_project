@@ -2,6 +2,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 #I need to import this stuff for the password checking and hashing
 from werkzeug.security import check_password_hash, generate_password_hash
 #doing these imports to get data from the api
+from PIL import Image
 import json
 import requests
 import os
@@ -61,7 +62,7 @@ def unit_info_helper(user_game_info):
 @bp.route('/find/<string:username>',methods=['GET','POST'])
 def findUser(username):
     #I should try to do soemthing if there is an error
-    
+
     #I am getting the url for the json file that has the id for the username
     apicall_username = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(username)
     username_response  = requests.get(apicall_username).text
@@ -112,7 +113,13 @@ def findUser(username):
     unit_info_list = unit_info_helper(user_game_info)
     #now unit_info_list has all relevent information about the units I had in this game
 
-    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list)#'Hello {}'.format(unit_info_list)
+    #getting a list of the strings I will use to get the pictures
+    unit_picture_list = list()
+    for unit in unit_info_list:
+        #here I should get all characters after the first 5ish characters and send a list of them to the html and then add all the pictures
+        word = ( unit[0][5:].lower() ) + '.png'
+        unit_picture_list.append(word)
+    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list,pictures=unit_picture_list)
 
 
 #This is a helper function that will give the findUser the argument it needs ot work

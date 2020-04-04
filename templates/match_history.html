@@ -19,9 +19,11 @@
           {{trait}}
         {% endfor %}
        </div>
-
-
   </div>
+  <!--Printing out the picture of every champion -->
+  {% for picture in pictures %}
+    <img src="{{url_for('static', filename='images/champions/'+picture)}}"  alt={{picture}} align="middle" />
+  {% endfor %}
 </div>
 
 {% endblock %}
