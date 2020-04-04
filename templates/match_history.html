@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<!--I think that I will have the match placement on the right first  -->
+<div class="container-fluid">
+  <div class="row">
+    <!--This will have the placement of the person -->
+      <div class="col-lg-1">{{place}} </div>
+      <!-- This will have team comp info like the champions they have -->
+      <div class="col-lg-5">
+        {% for unit in team %}
+          {{unit}}
+        {% endfor %}
+       </div>
+      <!--This will have the kind of traits they had when the game ended  -->
+      <div class="col-lg-5">
+        {% for trait in traits %}
+          {{trait}}
+        {% endfor %}
+       </div>
+
+
+  </div>
+</div>
+
+{% endblock %}

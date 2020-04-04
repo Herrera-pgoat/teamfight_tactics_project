@@ -3,10 +3,5 @@
 {% block content %}
 <h1> Home page </h1>
 
-  <div class="col-12 container">
-    <form action="{{url_for('.findUserHelper')}}" method="POST">
-      <input type="text"  class="form-control col-12 col-lg-4 "name='username' placeholder="enter summoner name"/>
-      <input type = "submit" class="btn mr-5" name="submit" value="submit form" style="background-color:#30a7d7"/>
-    </form>
-  </div>
+
 {% endblock %}

@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 #doing these imports to get data from the api
 import json
 import requests
+import os
 
 #this is the blueprint for the website
 #This site is going to be so small that I probably didn't need a blueprint but I wanted to have all of my views in one place
@@ -24,11 +25,45 @@ def login():
 def createAccount():
     return 'ca'
 
+#helper funciton that gets me the unit ifnrmation
+def unit_info_helper(user_game_info):
+    unit_info_list = list()
+    for unit in user_game_info['units']:
+        #I am getting every item that the unit has [:] gets me everythign in the list even if it is empty!
+        unit_info_items = (unit['items'][:])
+        #I want to give the items the name they deserve
+        #have to give this new values to delete the old ones incase this new unit doesn't have any new items
+        unit_info_items_named = list()
+        #if there are items I will try to rename them otherwise I will not
+        if( len(unit_info_items) > 0):
+            #Getting the path of the local json file
+            THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+            my_file = os.path.join(THIS_FOLDER, 'tft_info/items.json')
+            with open(my_file, 'r') as myfile:
+                data=myfile.read()
+            #THis is the json file with all the item names
+            item_num_to_name = json.loads(data)
+            #going through each item the champion has.
+            for item_num in unit_info_items:
+                for item in item_num_to_name:
+                    if item_num == item['id']:
+                        unit_info_items_named.append(item['name'])
+                    else:
+                        #nothing
+                        print('hi')
+        #I am adding the character name. #unit_info_items unpacks the tuple and puts its items here
+        unit_info = (unit['character_id'],*unit_info_items_named,unit['rarity'],unit['tier'])
+        unit_info_list.append(unit_info)
+    return unit_info_list
+    #now unit_info_list has all relevent information about the units I had in this game
+
 #The string:username says that we have an argument that is a string type and name is username and we return the suer name in the request return
 @bp.route('/find/<string:username>',methods=['GET','POST'])
 def findUser(username):
+    #I should try to do soemthing if there is an error
+    
     #I am getting the url for the json file that has the id for the username
-    apicall_username = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-38025a0a-63c7-4d01-82c7-fe9b65496279'.format(username)
+    apicall_username = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(username)
     username_response  = requests.get(apicall_username).text
     apicall_username_info = json.loads(username_response)
     #getting all the information from the json file I have loaded which are different ways to id the user
@@ -39,14 +74,14 @@ def findUser(username):
 
     #okay I have different ways to id the user now I want to get my most recent tft game and put my placing in the thing
     #first get api call to all the matches and using the puuid to get list of matches
-    apicall_matches = 'https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-38025a0a-63c7-4d01-82c7-fe9b65496279'.format(puuid)
+    apicall_matches = 'https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(puuid)
     matches_response = requests.get(apicall_matches).text
     apicall_matches_info = json.loads(matches_response)
     #getting the id of the last match this user has played
     last_match_id = apicall_matches_info[0]
 
     #now I literally want to get the api call for the match that was played
-    apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-38025a0a-63c7-4d01-82c7-fe9b65496279'.format(last_match_id)
+    apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(last_match_id)
     game_response = requests.get(apicall_game).text
     apicall_game_info = json.loads(game_response)
 
@@ -73,15 +108,12 @@ def findUser(username):
         traits_list.append(trait_info)
     #traits_list now has all the relevent information
 
-    unit_info_list = list()
-    for unit in user_game_info['units']:
-        #I am getting every item that the unit has [:] gets me everythign in the list even if it is empty!
-        unit_info_items = (unit['items'][:])
-        #I am adding the character name. #unit_info_items unpacks the tuple and puts its items here
-        unit_info = (unit['character_id'],*unit_info_items,unit['rarity'],unit['tier'])
-        unit_info_list.append(unit_info)
-    #now unit_info_list has all relevent information about the units I had in this game 
-    return 'Hello {}'.format(unit_info_list)
+    #calling a function that gets all the informatio about units
+    unit_info_list = unit_info_helper(user_game_info)
+    #now unit_info_list has all relevent information about the units I had in this game
+
+    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list)#'Hello {}'.format(unit_info_list)
+
 
 #This is a helper function that will give the findUser the argument it needs ot work
 @bp.route('/find/help',methods=['GET','POST'])
@@ -92,4 +124,4 @@ def findUserHelper():
         return redirect(url_for('.findUser',username=name))
     #if they just typed this /find/help in they would get cofeebean which I think is me :D
     else:
-        return redirect(url_for('.findUser',username='cofeebean'))
+        return redirect(url_for('.findUser',username='COFEEBAN'))
