@@ -1,0 +1,10 @@
+<!-- I won't lie I went to bootstrap website and got most of this code from there -->
+<nav class="navbar navbar-light bg-primary justify-content-between">
+  <a class="navbar-brand" href="{{url_for('.mainPage')}}">TFT Matches</a>
+
+  <a class="nav-item nav-link ml-auto mr-3 " align="vertical" href="{{url_for('.about')}}" style="color:black;font-size:20"> About </a>
+  <form class="form-inline" action="{{url_for('.findUserHelper')}}" method="POST" >
+    <input id="nav_search" class="form-control mr-sm-2" type="search"  name='username' placeholder="Find Summoner" aria-label="Search">
+    <button id="nav_submit" class="btn my-2 my-sm-0" type="submit" style="background-color:#30a7d7">Search</button>
+  </form>
+</nav>

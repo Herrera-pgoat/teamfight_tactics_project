@@ -1,16 +1,27 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/phone_viewing.css') }}">
+
   <body>
-    <div class="col-12 container mt-5 ml-3">
-      <form action="{{url_for('.findUserHelper')}}" method="POST">
-        <input type="text"  class="form-control col-12 col-lg-4 "name='username' placeholder="enter summoner name"/>
-        <input type = "submit" class="btn mr-5" name="submit" value="submit form" style="background-color:#30a7d7"/>
-      </form>
-    </div>
+
+    <!--Putting the navbar on every page! -->
+    {% include 'partials/_navbar.html' %}
+
+
     {% block content %}
 
     {% endblock %}
   </body>
+
+  <script>
+    document.getElementById("nav_search").addEventListener("input", enter);
+
+    function enter(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("nav_submit").click();
+      }
+  </script>
 
 </html>

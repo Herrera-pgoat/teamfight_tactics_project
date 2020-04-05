@@ -26,6 +26,10 @@ def login():
 def createAccount():
     return 'ca'
 
+@bp.route('/about',methods=['GET','POST'])
+def about():
+    return render_template('about.html')
+
 #helper funciton that gets me the unit ifnrmation
 def unit_info_helper(user_game_info):
     unit_info_list = list()
@@ -78,6 +82,12 @@ def findUser(username):
     username_response  = requests.get(apicall_username).text
     apicall_username_info = json.loads(username_response)
     #getting all the information from the json file I have loaded which are different ways to id the user
+
+    #if the user name is not in the rito databse we give them an error
+    if len(apicall_username_info) == 1:
+        flash('No one has the summoner name {}'.format(username))
+        return redirect (url_for('.mainPage') )
+
     summoner_name = apicall_username_info['name']
     id = apicall_username_info['id']
     account_id = apicall_username_info['accountId']
@@ -88,9 +98,14 @@ def findUser(username):
     apicall_matches = 'https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(puuid)
     matches_response = requests.get(apicall_matches).text
     apicall_matches_info = json.loads(matches_response)
+
+    #if they have no tft games played we give them an error
+    if len(apicall_matches_info) == 0:
+        flash('{} has no tft games'.format(summoner_name))
+        return redirect (url_for('.mainPage') )
+
     #getting the id of the last match this user has played
     last_match_id = apicall_matches_info[0]
-
     #now I literally want to get the api call for the match that was played
     apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(last_match_id)
     game_response = requests.get(apicall_game).text

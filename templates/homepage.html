@@ -1,7 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1> Home page </h1>
+  <div class="mb-3 mt-1" style="">
+    <h1 class="mt-1 mb-2" style="text-align:center"> TFT Match History  </h1>
+    <div class="container col-lg-5" style="text-align:center">
+      Look up the Teamfight Tactics match history of any summoner who has played it!
+    </div>
+  </div>
+  <div class="row">
+  <!-- I have a big search button on the home page IF you are on mobile then this doesn't show-->
+    <div id="home_search" class="col-sm-0 col-lg-12" style="">
+      <form class="nowrap d-flex" action="{{url_for('.findUserHelper')}}" method="POST" style="justify-content: center">
+        <input id="home_search" type="text"  class="form-control col-12 col-lg-5 "name='username' placeholder="Find Summoner"/>
+        <br>
+        <input id="home_submit" type = "submit" class="btn mr-5" name="submit" value="Search" style="background-color:#30a7d7"/>
+      </form>
+    </div>
 
+
+  </div>
+
+  {% for error in get_flashed_messages() %}
+    <div class="col-sm-6 container" style="background-color:pink;border: 2px solid red;"> {{error}} </div>
+  {% endfor %}
+
+  <script>
+    document.getElementById("home_search").addEventListener("input", enter);
+
+    function enter(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("home_submit").click();
+      }
+  </script>
 
 {% endblock %}

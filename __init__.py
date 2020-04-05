@@ -1,6 +1,9 @@
 from flask import Flask, render_template
 
 app = Flask(__name__)
+app.config.from_mapping(
+    SECRET_KEY='f8e9f4#Ft447F1f48F4T$f556w5gtK(*ty%Er95$ERf89w_',
+)
 
 #I am probably going to make a function that returns the color we are going to border our unit with here that way I just call the function rather than do 5 ifs
 def border_color(unit_rarity):
@@ -39,13 +42,13 @@ def place_color(place):
         return "gold;"
     #This is going to be the silver tier
     elif place == 2:
-        return "#7b9694"
+        return "#7b9694;"
     #We are at the bronze tier :(
-    elif my_tier == 3:
-        return "rgb(142, 97, 68)"
+    elif place == 3:
+        return "rgb(142, 97, 68);"
     #we are at the bottom  tier :(
     else:
-        return "grey"
+        return "grey;"
 
 #I am bringing in the lower function to make strings lowercase to the jinja template engine
 app.jinja_env.globals.update(lower=str.lower)
