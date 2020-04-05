@@ -12,13 +12,49 @@ def border_color(unit_rarity):
         3:"border: 2px solid rgb(206, 0, 255)",
         4:"border: 2px solid rgb(255, 188, 0)",
     }
-    #returning the border css for the rarity this unit is. If not found we return nothing 
+    #returning the border css for the rarity this unit is. If not found we return nothing
     return rarity_border.get(unit_rarity,"")
+
+#function that gives us what the color associated with the background of the trait
+def trait_color(trait):
+    num_tiers = trait[3]
+    my_tier = trait[2]
+    #this color is gold and will occur if they are both the max value
+    if my_tier == num_tiers:
+        return "background-color:gold;"
+    #This is going to be the silver tier
+    elif my_tier == (num_tiers -1):
+        return "background-color:#7b9694"
+    #We are at the bottom tier
+    elif my_tier == 0:
+        return "background-color:rgb(30,34,41)"
+    #we are at the bronze tier :(
+    else:
+        return "background-color:rgb(142, 97, 68)"
+
+#function that will give us what the color of the place and the stuff other stuff idk
+def place_color(place):
+    #first place
+    if place == 1:
+        return "gold;"
+    #This is going to be the silver tier
+    elif place == 2:
+        return "#7b9694"
+    #We are at the bronze tier :(
+    elif my_tier == 3:
+        return "rgb(142, 97, 68)"
+    #we are at the bottom  tier :(
+    else:
+        return "grey"
 
 #I am bringing in the lower function to make strings lowercase to the jinja template engine
 app.jinja_env.globals.update(lower=str.lower)
+app.jinja_env.globals.update(trait_color=trait_color)
 app.jinja_env.globals.update(border_color=border_color)
-
+app.jinja_env.globals.update(place_color=place_color)
+app.jinja_env.globals.update(zip=zip)
+app.jinja_env.globals.update(str=str)
+app.jinja_env.globals.update(len=len)
 
 from . import pages
 app.register_blueprint(pages.bp)

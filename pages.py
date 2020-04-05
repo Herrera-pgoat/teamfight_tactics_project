@@ -29,9 +29,19 @@ def createAccount():
 #helper funciton that gets me the unit ifnrmation
 def unit_info_helper(user_game_info):
     unit_info_list = list()
+    item_num_list = list()
     for unit in user_game_info['units']:
         #I am getting every item that the unit has [:] gets me everythign in the list even if it is empty!
         unit_info_items = (unit['items'][:])
+
+        #basically if the item is 1 charcter we add a zero to the front of it
+        item_list_unit = list()
+        for item in unit_info_items:
+            if((item) > 9):
+                item_list_unit.append(item)
+            else:
+                item_list_unit.append('0'+str(item))
+        item_num_list.append(item_list_unit)
         #I want to give the items the name they deserve
         #have to give this new values to delete the old ones incase this new unit doesn't have any new items
         unit_info_items_named = list()
@@ -55,7 +65,7 @@ def unit_info_helper(user_game_info):
         #I am adding the character name. #unit_info_items unpacks the tuple and puts its items here
         unit_info = (unit['character_id'],*unit_info_items_named,unit['rarity'],unit['tier'])
         unit_info_list.append(unit_info)
-    return unit_info_list
+    return (unit_info_list,item_num_list)
     #now unit_info_list has all relevent information about the units I had in this game
 
 #The string:username says that we have an argument that is a string type and name is username and we return the suer name in the request return
@@ -64,7 +74,7 @@ def findUser(username):
     #I should try to do soemthing if there is an error
 
     #I am getting the url for the json file that has the id for the username
-    apicall_username = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(username)
+    apicall_username = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(username)
     username_response  = requests.get(apicall_username).text
     apicall_username_info = json.loads(username_response)
     #getting all the information from the json file I have loaded which are different ways to id the user
@@ -75,14 +85,14 @@ def findUser(username):
 
     #okay I have different ways to id the user now I want to get my most recent tft game and put my placing in the thing
     #first get api call to all the matches and using the puuid to get list of matches
-    apicall_matches = 'https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(puuid)
+    apicall_matches = 'https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(puuid)
     matches_response = requests.get(apicall_matches).text
     apicall_matches_info = json.loads(matches_response)
     #getting the id of the last match this user has played
     last_match_id = apicall_matches_info[0]
 
     #now I literally want to get the api call for the match that was played
-    apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-7c6d7344-eb60-4329-ab47-26c54dcbd055'.format(last_match_id)
+    apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(last_match_id)
     game_response = requests.get(apicall_game).text
     apicall_game_info = json.loads(game_response)
 
@@ -110,10 +120,12 @@ def findUser(username):
     #traits_list now has all the relevent information
 
     #calling a function that gets all the informatio about units
-    unit_info_list = unit_info_helper(user_game_info)
+    unit_info_list_and_items = unit_info_helper(user_game_info)
+    unit_info_list = unit_info_list_and_items[0]
+    item_num_list = unit_info_list_and_items[1]
     #now unit_info_list has all relevent information about the units I had in this game
-    
-    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list)
+
+    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list,item_list=item_num_list)
 
 
 #This is a helper function that will give the findUser the argument it needs ot work
