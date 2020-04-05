@@ -48,7 +48,7 @@ def place_color(place):
         return "rgb(142, 97, 68);"
     #we are at the bottom  tier :(
     else:
-        return "grey;"
+        return "black;"
 
 #I am bringing in the lower function to make strings lowercase to the jinja template engine
 app.jinja_env.globals.update(lower=str.lower)

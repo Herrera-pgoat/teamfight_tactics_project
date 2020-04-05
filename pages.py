@@ -104,43 +104,53 @@ def findUser(username):
         flash('{} has no tft games'.format(summoner_name))
         return redirect (url_for('.mainPage') )
 
-    #getting the id of the last match this user has played
-    last_match_id = apicall_matches_info[0]
-    #now I literally want to get the api call for the match that was played
-    apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(last_match_id)
-    game_response = requests.get(apicall_game).text
-    apicall_game_info = json.loads(game_response)
-
-    #now we are going to do some thing
-    participant_number = 0
-    number = 0
-    for id in apicall_game_info['metadata']['participants']:
-        if id == puuid:
-            participant_number = number
+    #I am going to return the last two games they have played
+    match_history_list = list()
+    for i in range(0,5):
+        if( (1+i) > len(apicall_matches_info ) ):
             break
-        number +=1
 
-    #now with participant_number I have the number that the user is in the list of json thing
-    user_game_info = apicall_game_info['info']['participants'][participant_number]
+        #getting the id of the last match this user has played
+        last_match_id = apicall_matches_info[i]
+        #now I literally want to get the api call for the match that was played
+        apicall_game = 'https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-fc307e03-ef97-4626-956b-a19957386943'.format(last_match_id)
+        game_response = requests.get(apicall_game).text
+        apicall_game_info = json.loads(game_response)
 
-    #I got my placements in the thing
-    user_placement = user_game_info['placement']
+        #now we are going to do some thing
+        participant_number = 0
+        number = 0
+        for id in apicall_game_info['metadata']['participants']:
+            if id == puuid:
+                participant_number = number
+                break
+            number +=1
 
-    #I am going to get the traits I had
-    traits_list = list()
-    for trait in user_game_info['traits']:
-        #creating a tuple with the information about the trait like how many units the tier I was in the number of tiers
-        trait_info = (trait['name'],trait['num_units'],trait['tier_current'],trait['tier_total'])
-        traits_list.append(trait_info)
-    #traits_list now has all the relevent information
+        #now with participant_number I have the number that the user is in the list of json thing
+        user_game_info = apicall_game_info['info']['participants'][participant_number]
 
-    #calling a function that gets all the informatio about units
-    unit_info_list_and_items = unit_info_helper(user_game_info)
-    unit_info_list = unit_info_list_and_items[0]
-    item_num_list = unit_info_list_and_items[1]
-    #now unit_info_list has all relevent information about the units I had in this game
+        #I got my placements in the thing
+        user_placement = user_game_info['placement']
 
-    return render_template('match_history.html',place=user_placement,traits=traits_list,team=unit_info_list,item_list=item_num_list)
+        #I am going to get the traits I had
+        traits_list = list()
+        for trait in user_game_info['traits']:
+            if(trait['name'] == 'TemplateTrait'):
+                continue
+            #creating a tuple with the information about the trait like how many units the tier I was in the number of tiers
+            trait_info = (trait['name'],trait['num_units'],trait['tier_current'],trait['tier_total'])
+            traits_list.append(trait_info)
+        #traits_list now has all the relevent information
+
+        #calling a function that gets all the informatio about units
+        unit_info_list_and_items = unit_info_helper(user_game_info)
+        unit_info_list = unit_info_list_and_items[0]
+        item_num_list = unit_info_list_and_items[1]
+        #now unit_info_list has all relevent information about the units I had in this game
+
+        match_history_list.append( (user_placement,traits_list,unit_info_list,item_num_list) )
+#,place=user_placement,traits=traits_list,team=unit_info_list,item_list=item_num_list
+    return render_template('match_history.html',match_history=match_history_list)
 
 
 #This is a helper function that will give the findUser the argument it needs ot work
