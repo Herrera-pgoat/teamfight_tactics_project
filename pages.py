@@ -2,10 +2,12 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 #I need to import this stuff for the password checking and hashing
 from werkzeug.security import check_password_hash, generate_password_hash
 #doing these imports to get data from the api
-from PIL import Image
 import json
 import requests
 import os
+#importing the models I needs
+from . import db
+from .models import User
 
 #this is the blueprint for the website
 #This site is going to be so small that I probably didn't need a blueprint but I wanted to have all of my views in one place
@@ -15,19 +17,67 @@ bp = Blueprint('', __name__)
 
 @bp.route('/',methods=['GET','POST'])
 def mainPage():
+    #We get a post when we try to login
+    if( request.method =="POST"):
+        #We are in a post method which means they tried to log in
+        #I need to check for the user name they put in and if the password they put in matches the password with that username
+        username = request.form['usernameForm']
+        password = request.form['passwordForm']
+
+        user = User.query.filter_by(username=username).first()
+        if(user is None):
+            #That username is not in the db so they can't log in
+            flash("That username is not in the database. Try creating an account!")
+            return redirect(url_for('.login'))
+        elif (check_password_hash(user.password_hash,password)):
+            #The username is in the database and the password matches
+            session.clear()
+            #if we are here then the user is 'logged in'
+            session['username'] = username
+        else:
+            flash("The password does not match the usernames")
+            return redirect(url_for('.login'))
+
     return render_template('homepage.html')
     #return render_template('path_from_template_folder')
 
 @bp.route('/login',methods=['GET','POST'])
 def login():
     if(request.method =='POST'):
+        #Getting the information they put in from the form
+        username = request.form['usernameForm']
+        password = request.form['passwordForm']
+        passwordConfirm = request.form['passwordConfirmForm']
+        #if the user did not enter the same password twice for some reason
+        if(password == passwordConfirm):
+            #Here we should check whether the user exists already or not
+            user = User.query.filter_by(username=username).first()
+            if(user is None):
+                #If we enter this then no user of that name exists so we put this user in the tableTypes
+                #This is correctly adding the user to the user table with a hashed password. sha256 and salt
+                newUser = User(username= username,password_hash= generate_password_hash(password))
+                db.session.add(newUser)
+                db.session.commit()
+            else:
+                flash('That username already exists! Pick a new one!')
+                return redirect(url_for('.createAccount'))
+        else:
+            #Flash is stores the message we pass as argument and sends what it stores
+            #to the register.html and in there I will put out a message that says what is in the flash !
+            flash('Passwords do not match')
+            return redirect(url_for('.createAccount'))
+            #If we enter this one we should send an error and still go to register.html
         #if we are here then we came from the create account
+
+        #HERE I WILL CHECK IF THE USER ENTERED OKAY INFORMATION TO CREATE AN ACCOUNT AND IF THEY did I will create an account and go to login.path_from_template_folder
+        #otherwise if they entered bad info we will go to create account again :(
         flash('You have successfully created an account!')
-        
+
     return render_template('login.html')
 
 @bp.route('/createAccount',methods=['GET','POST'])
 def createAccount():
+    #sometimes we come here from the login function
     return render_template('createAccount.html')
 
 @bp.route('/about',methods=['GET','POST'])
