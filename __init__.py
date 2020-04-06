@@ -1,9 +1,18 @@
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+import os
 
 app = Flask(__name__)
 app.config.from_mapping(
     SECRET_KEY='f8e9f4#Ft447F1f48F4T$f556w5gtK(*ty%Er95$ERf89w_',
+     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join('C:\\Users\\levih\\Desktop\\flaskStuff\\teamfight_tactics_project', 'tft.db')
+    # SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 #I am probably going to make a function that returns the color we are going to border our unit with here that way I just call the function rather than do 5 ifs
 def border_color(unit_rarity):
@@ -59,5 +68,5 @@ app.jinja_env.globals.update(zip=zip)
 app.jinja_env.globals.update(str=str)
 app.jinja_env.globals.update(len=len)
 
-from . import pages
+from . import pages, models
 app.register_blueprint(pages.bp)
