@@ -20,11 +20,15 @@ def mainPage():
 
 @bp.route('/login',methods=['GET','POST'])
 def login():
-    return 'login'
+    if(request.method =='POST'):
+        #if we are here then we came from the create account
+        flash('You have successfully created an account!')
+        
+    return render_template('login.html')
 
 @bp.route('/createAccount',methods=['GET','POST'])
 def createAccount():
-    return 'ca'
+    return render_template('createAccount.html')
 
 @bp.route('/about',methods=['GET','POST'])
 def about():

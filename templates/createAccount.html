@@ -1,0 +1,31 @@
+{% include 'base.html'%}
+
+{% block content %}
+
+<!-- We show an error when we try to log and we are incorrect with some information -->
+{% for error in get_flashed_messages() %}
+  <div class="col-sm-6 container" style="background-color:pink;border: 2px solid red;"> {{error}} </div>
+{% endfor %}
+
+
+<form action="{{url_for('.login')}}" method="POST" >
+  <div class="">
+  	<!-- gathering information from users -->
+    <div class="form-group col-lg-4">
+      <label for="usernameForm"> Username </label>
+      <input type="text" class="form-control" value="" name="usernameForm" id="usernameForm" placeholder="Enter Username" required/>
+    </div>
+    <div class="form-group col-lg-4">
+      <label for="passwordForm">Password </label>
+      <input type="password" class="form-control" value="" name="passwordForm" id="passwordForm" placeholder="Enter Password" required/>
+    </div>
+    <div class="form-group col-lg-4">
+      <label for="passwordConfirmForm">Confirm Password </label>
+      <input type="password" class="form-control" value="" name="passwordConfirmForm" id="passwordConfirmForm" placeholder="Confirm Password"  required />
+    </div>
+    <!-- Submitting the form  -->
+    <input type="submit" class="btn ml-3" value="Create Account" name="submit" style="background-color:#30a7d7"  />
+  </div>
+</form>
+
+{% endblock %}
