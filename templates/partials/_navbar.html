@@ -9,9 +9,16 @@
   <div class="collapse navbar-collapse" id="navbarOptions">
     <!--ml-auto puts us all the way on the right of the nav bar -->
     <div class="navbar-nav ml-auto">
-      <!--These are the things I want to be collapsed once we are on medium or below screen -->
-      <a class="nav-item nav-link " align="vertical" href="{{url_for('.login')}}" style="color:black;font-size:20"> Login </a>
-      <a class="nav-item nav-link " align="vertical" href="{{url_for('.createAccount')}}" style="color:black;font-size:20"> Register </a>
+      {% if g.user %}
+        <!--These are the things I want to be collapsed once we are on medium or below screen -->
+        <div class="nav-item" align="vertical" style="color:black;font-size:20"> Hi {{g.user['username']}} </div> 
+        <a class="nav-item nav-link " align="vertical" href="{{url_for('.userSettings')}}" style="color:black;font-size:20"> Settings </a>
+        <a class="nav-item nav-link " align="vertical" href="{{url_for('.logout')}}" style="color:black;font-size:20"> Logout </a>
+      {% else %}
+        <!--These are the things I want to be collapsed once we are on medium or below screen -->
+        <a class="nav-item nav-link " align="vertical" href="{{url_for('.login')}}" style="color:black;font-size:20"> Login </a>
+        <a class="nav-item nav-link " align="vertical" href="{{url_for('.createAccount')}}" style="color:black;font-size:20"> Register </a>
+      {% endif %}
       <!--mr-3 has a 3 unit margin on the right of the about url  -->
       <a class="nav-item nav-link mr-3 " align="vertical" href="{{url_for('.about')}}" style="color:black;font-size:20"> About </a>
     </div>

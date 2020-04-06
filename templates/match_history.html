@@ -2,46 +2,6 @@
 
 {% block content%}
 
-{% for match in match_history %}
-  <div class="container-fluid card d-flex mt-1" style="background-color:#9ccFFd;border-left: 8px solid {{place_color(match[0])}};">
-    <div class="row">
-      <!--This will have the placement of the person -->
-        <h1 class="col-lg-1 my-auto mx-auto" style="color:{{place_color(match[0])}}"> {{match[0]}} </h1>
+{% include 'partials/_match_history.html' %}
 
-        <!--Printing out the picture of every champion. Getting their picture from the name of the unit in the team -->
-        <span class="row col-lg-8" style="">
-          {% for unit,items in zip(match[2],match[3]) %}
-          <!--This is position relative that way the position absolute uses this tag as its closest positioned relative. So the absolute tag will be posted with this tag as the absolute -->
-           <div class="ml-3" style="position:relative;">
-           <!-- I am checking if the name from the 5th charcater up is in the picture name-->
-           <img id="champion_image" title="{{unit[0]}}" class="" src="{{url_for('static', filename='images/champions/'+lower(unit[0][5:] + '.png'))}}" alt={{unit[0]}} align="middle" style="{{border_color(unit[-2])}};border-radius: 0.25rem;z-index:1" >
-             <!--I am printing out a picture of the champion soon to be replaced with a star for each level the champion was -->
-             <!--The z-index tells us we want it to appear above anything with a lower z index. Like in front of not above -->
-             <!--I only want as many stars to appear as there are levels the champion has-->
-             {% for i in range(0, (unit[-1]) ) %}
-               <img id="level_image" title="" src="{{url_for('static', filename='images/champions/'+lower(unit[0][5:] + '.png'))}}"  alt={{unit[0]}} align="middle" style="left:{{1+15*i}}px;position:absolute;z-index:2;">
-             {% endfor %}
-             <!--If I want to print out the items I will have to do it right here in this place  -->
-             <div class="" style="display: block;height:{{ (len(items)) * 35 +10}}px" >
-               {% for item in items %}
-                 <img id="item_image" src="{{url_for('static', filename='images/items/'+str(item) + '.png')}}"  alt={{item}} width="30" height="30" align="middle" style="border: 2px solid black;margin-top:0px;position:relative;z-index:1;">
-                 <br>
-               {% endfor %}
-             </div>
-             </div>
-          {% endfor %}
-        </span>
-        <span class="row col-lg-3" style="">
-         <!--Here I am going to have the traits show with the pictures -->
-         {% for trait in match[1] %}
-           {% if 'Set3' in trait[0] %}
-             <img title="{{trait[0][5:]}}" src="{{url_for('static', filename='images/traits/'+lower(trait[0][5:]) + '.png')}}"  alt={{item}} width="40" height="40" align="middle" style="border: 2px solid black;margin-top:1px;top:0px;z-index:2;{{trait_color(trait)}}">
-           {% else %}
-             <img title="{{trait[0]}}" src="{{url_for('static', filename='images/traits/'+lower(trait[0]) + '.png')}}"  alt={{item}} width="40" height="40" align="middle" style="border: 2px solid black;margin-top:1px;top:0px;z-index:2;{{trait_color(trait)}}">
-           {% endif %}
-         {% endfor %}
-        </span>
-    </div>
-  </div>
-{% endfor %}
 {% endblock %}

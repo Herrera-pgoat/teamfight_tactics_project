@@ -16,10 +16,13 @@
         <input id="home_submit" type = "submit" class="btn mr-5" name="submit" value="Search" style="background-color:#30a7d7"/>
       </form>
     </div>
-
+    <!--If the user is logged in I will show them the last three matches of the person they followed -->
+    {% if g.user and g.user.following_user %}
+      <div class="mx-auto" > Here are the last three TFT games of the user you are following: {{g.user.following_user}} </div>
+      {% include 'partials/_match_history.html' %}
+    {% endif %}
 
   </div>
-
   {% for error in get_flashed_messages() %}
     <div class="col-sm-6 container" style="background-color:pink;border: 2px solid red;"> {{error}} </div>
   {% endfor %}

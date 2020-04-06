@@ -4,10 +4,8 @@
   <link rel="stylesheet" href="{{ url_for('static',filename='css/phone_viewing.css') }}">
 
   <body>
-
     <!--Putting the navbar on every page! -->
     {% include 'partials/_navbar.html' %}
-
 
     {% block content %}
 
@@ -15,6 +13,7 @@
   </body>
 
   <script>
+  //some javascript so that the enter key is as good as a button press 
     document.getElementById("nav_search").addEventListener("input", enter);
 
     function enter(event) {

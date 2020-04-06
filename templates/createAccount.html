@@ -7,7 +7,9 @@
   <div class="col-sm-6 container" style="background-color:pink;border: 2px solid red;"> {{error}} </div>
 {% endfor %}
 
-
+{% if g.user %}
+  <p> You are already have an account but you can make another one if you want! </p>
+{% endif %}
 <form action="{{url_for('.login')}}" method="POST" >
   <div class="">
   	<!-- gathering information from users -->

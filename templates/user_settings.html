@@ -1,0 +1,30 @@
+{% include 'base.html' %}
+
+{% block content %}
+
+  {% if g.user %}
+    <div class="container">
+      <div class="mx-auto col-lg-8" >
+        You can have the match history show on the home screen for whatever summoner id you enter here.
+        When you enter a name here it will replace the previously entered name.
+      </div>
+      <div class="mb-3 mx-auto col-lg-8" style="background-color:grey">
+          You are currently following: {{following}}
+      </div>
+    </div>
+
+    <form action="{{url_for('.userSettings')}}" method="POST">
+      <div class="form-group col-lg-4">
+        <label for="summonerName">Follow a single Summoner name </label>
+        <input type="text" class="form-control" value="" name="summonerName" id="summonerName" placeholder="Follow Summoner"  required />
+      </div>
+      <!-- Submitting the form  -->
+      <input type="submit" class="btn ml-3" value="Follow Summoner" name="submit" style="background-color:#30a7d7"  />  </form>
+  {% else %}
+    <div class="container">
+      <div class="mx-auto col-lg-8" >
+        You should be logged in to view this page. Log in and this will have real content :) Please.
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
