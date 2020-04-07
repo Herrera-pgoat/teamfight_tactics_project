@@ -10,18 +10,19 @@
 {% if g.user %}
   <p> You are already have an account but you can make another one if you want! </p>
 {% endif %}
-<form action="{{url_for('.login')}}" method="POST" >
-  <div class="">
+<span class="d-flex flex-wrap ">
+<form class="col-12 col-lg-4" action="{{url_for('.login')}}" method="POST" >
+  <div class="row">
   	<!-- gathering information from users -->
-    <div class="form-group col-lg-4">
+    <div class="form-group col-lg-12">
       <label for="usernameForm"> Username </label>
       <input type="text" class="form-control" value="" name="usernameForm" id="usernameForm" placeholder="Enter Username" required/>
     </div>
-    <div class="form-group col-lg-4">
+    <div class="form-group col-lg-12">
       <label for="passwordForm">Password </label>
       <input type="password" class="form-control" value="" name="passwordForm" id="passwordForm" placeholder="Enter Password" required/>
     </div>
-    <div class="form-group col-lg-4">
+    <div class="form-group col-lg-12">
       <label for="passwordConfirmForm">Confirm Password </label>
       <input type="password" class="form-control" value="" name="passwordConfirmForm" id="passwordConfirmForm" placeholder="Confirm Password"  required />
     </div>
@@ -29,5 +30,9 @@
     <input type="submit" class="btn ml-3" value="Create Account" name="submit" style="background-color:#30a7d7"  />
   </div>
 </form>
+<div class="nowrap col-12 col-lg-4" style="text-align:left">
+  When you create an account you can follow a user and see their last three games when you are at the home screen.
+</div>
+</span>
 
 {% endblock %}

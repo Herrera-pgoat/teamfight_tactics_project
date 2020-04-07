@@ -13,7 +13,7 @@
   </body>
 
   <script>
-  //some javascript so that the enter key is as good as a button press 
+  //some javascript so that the enter key is as good as a button press
     document.getElementById("nav_search").addEventListener("input", enter);
 
     function enter(event) {
@@ -21,6 +21,7 @@
         event.preventDefault();
         document.getElementById("nav_submit").click();
       }
+    }
   </script>
 
   <script src={{url_for('static',filename='js/jquery-3.4.1.js')}} > </script>

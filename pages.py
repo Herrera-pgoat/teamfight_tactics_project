@@ -57,7 +57,7 @@ def mainPage():
         summoner_name,id,account_id,puuid = user_info
 
         #Getting the list of matches they have played through the api call here
-        apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-15acd3d7-6151-4e0b-9a45-ded703e76fd2',puuid)
+        apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',puuid)
 
         #if they have no tft games played we give them an error
         if len(apicall_matches_info) == 0:
@@ -159,7 +159,7 @@ def findUser(username):
     summoner_name,id,account_id,puuid = user_info
 
     #Getting the list of matches they have played through the api call here
-    apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-15acd3d7-6151-4e0b-9a45-ded703e76fd2',puuid)
+    apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',puuid)
 
     #if they have no tft games played we give them an error
     if len(apicall_matches_info) == 0:

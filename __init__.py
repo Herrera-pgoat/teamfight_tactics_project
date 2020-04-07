@@ -47,13 +47,13 @@ def trait_color(trait):
 #function that will give us what the color of the place and the stuff other stuff idk
 def place_color(place):
     #first place
-    if place == 1:
+    if place == '1st':
         return "gold;"
     #This is going to be the silver tier
-    elif place == 2:
+    elif place == '2nd':
         return "#7b9694;"
     #We are at the bronze tier :(
-    elif place == 3:
+    elif place == '3rd':
         return "rgb(142, 97, 68);"
     #we are at the bottom  tier :(
     else:

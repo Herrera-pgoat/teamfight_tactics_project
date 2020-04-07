@@ -56,10 +56,21 @@ def apiInfoHelper(apiLink,id):
     api_response = requests.get(apiLink.format(id)).text
     return (json.loads(api_response))
 
+#returning a nice placement number instead of just a number
+def placeHelper(place):
+    if place ==1:
+        return '1st'
+    elif place==2:
+        return '2nd'
+    elif place ==3:
+        return '3rd'
+    else:
+        return (str(place)+'th')
+
 #This function returns the match info to the user
 def gameInfoHelper(last_match_id, id , puuid):
     #Getting information from the game the played through the api
-    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-15acd3d7-6151-4e0b-9a45-ded703e76fd2',last_match_id)
+    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',last_match_id)
 
     #now we are going to do some thing
     participant_number = 0
@@ -73,8 +84,9 @@ def gameInfoHelper(last_match_id, id , puuid):
     #now with participant_number I have the number that the user is in the list of json thing
     user_game_info = apicall_game_info['info']['participants'][participant_number]
 
-    #I got my placements in the thing
-    user_placement = user_game_info['placement']
+    #I got my placements in the thing.
+    user_placement = placeHelper(user_game_info['placement'])
+    user_gold_remaining = user_game_info['gold_left']
 
     #I am going to get the traits I had
     traits_list = list()
@@ -91,12 +103,12 @@ def gameInfoHelper(last_match_id, id , puuid):
     unit_info_list = unit_info_list_and_items[0]
     item_num_list = unit_info_list_and_items[1]
     #now unit_info_list has all relevent information about the units I had in this game
-    return ( user_placement,traits_list,unit_info_list,item_num_list )
+    return ( user_placement,traits_list,unit_info_list,item_num_list,user_gold_remaining )
 
 #function that gets returns identification information about the user
 def getUserInfo(username):
     #Getting user info through the riot api
-    apicall_username_info = apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-15acd3d7-6151-4e0b-9a45-ded703e76fd2',username)
+    apicall_username_info = apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',username)
     #if there is one thing we have an error and a  one length tuple we return as an error
     if len(apicall_username_info) == 1:
         return (1,)
