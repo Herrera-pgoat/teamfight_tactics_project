@@ -2,6 +2,11 @@
 
 {% block content%}
 
+<!--Showing the user the name of the perosn they looked up -->
+<div class="col-lg-6 container" style="background-color:#90ee90;border:2px solid green;">
+  Viewing match history of: {{summoner_name}}
+</div>
+
 {% include 'partials/_match_history.html' %}
 
 {% endblock %}

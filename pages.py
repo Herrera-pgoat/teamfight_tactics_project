@@ -9,7 +9,7 @@ import os
 from . import db
 from .models import User
 #importing a lot of helper functions from another file
-from .pages_helper import unit_info_helper,apiInfoHelper,gameInfoHelper,getUserInfo
+from .pages_helper import unit_info_helper,apiInfoHelper,gameInfoHelper_callApi,gameInfoHelper_giveApi,getUserInfo
 
 #this is the blueprint for the website
 #This site is going to be so small that I probably didn't need a blueprint but I wanted to have all of my views in one place
@@ -74,7 +74,7 @@ def mainPage():
             last_match_id = apicall_matches_info[i]
 
             #calling a function that gets me all the game info
-            game_info = gameInfoHelper(last_match_id, id,puuid)
+            game_info = gameInfoHelper_callApi(last_match_id, id,puuid)
             match_history_list.append( game_info  )
 
         return render_template('homepage.html',match_history =match_history_list)
@@ -176,11 +176,45 @@ def findUser(username):
         last_match_id = apicall_matches_info[i]
 
         #calling a function that gets me all the game info
-        game_info = gameInfoHelper(last_match_id, id,puuid)
+        game_info = gameInfoHelper_callApi(last_match_id, id,puuid)
         match_history_list.append( game_info  )
 
-    return render_template('match_history.html',match_history=match_history_list)
+    return render_template('match_history.html',summoner_name=summoner_name, match_history=match_history_list)
 
+#i am going to be sorting by the first thing in the placement
+def sortingFunctionPlacement(participant):
+    return participant[0][0]
+
+#We are giving a match history with the persepctive of the user
+@bp.route('/find/<string:summoner_name>/<string:match_id>',methods=['GET','POST'])
+def findMatch(summoner_name,match_id):
+    #first with the summoner name I need my id stuff
+    summoner_name_user,id_user,account_id_user,puuid_user= getUserInfo(summoner_name)
+    #I now have all this person's id
+
+    #Then with the match id I get the information about everyone in the match.
+    #Getting information from the game the played through the api
+    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',match_id)
+    summoner_names_list_match = list()
+    puuid_list_match = list()
+    for puuid in apicall_game_info['metadata']['participants']:
+        #I am getting both of them in the order they will appear in the info about the match
+        #I am going through each puuid in the match and am going to get their summoner name as well
+        puuid_list_match.append(puuid)
+        #I am getting the summoner name of each person in the match
+        summoner_names_list_match.append( apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',puuid)['name'] )
+
+    #now I want a list of information where it is sorted by place that contanins all the match information about this game for each person
+    #getting the match info for each person by going through each person in the for loop
+    participants_game_info = list()
+    for (participant,summoner) in zip(apicall_game_info['info']['participants'],summoner_names_list_match):
+        #getting information for this participant from the match that we want
+        participants_game_info.append( gameInfoHelper_giveApi(summoner,participant['puuid'],apicall_game_info) )
+    #Then I order id information for each person in the match. I sort by the placement number using python sort function for list
+    #each element in this list has the summoner name of the person in the list
+    participants_game_info.sort(key=sortingFunctionPlacement)
+    #now we are going to return the template with the participant_game_info
+    return render_template('game_info_details.html',participants_game_info=participants_game_info)
 
 #This is a helper function that will give the findUser the argument it needs ot work
 @bp.route('/find/help',methods=['GET','POST'])

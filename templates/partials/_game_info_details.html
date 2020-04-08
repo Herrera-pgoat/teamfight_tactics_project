@@ -1,21 +1,19 @@
-{% for match in match_history %}
-  <div class="container-fluid card d-flex mt-1" style="background-color:#9ccFFd;border-left: 8px solid {{place_color(match[0]) }}">
+{% for participant in participants_game_info %}
+<!--This is giving me the summoner name that way I know who is who when I look at the match history  -->
+  {{participant[-2]}}
+  <div class="container-fluid card d-flex mt-1" style="background-color:#9ccFFd;border-left: 8px solid {{place_color(participant[0]) }}">
     <div class="row">
       <!--This will have the placement of the person -->
-        <span  class = "col-lg-1 my-auto mx-auto" style="color:{{place_color(match[0]) }}">
-          <h1 class="" style=""> {{match[0]}}  </h1>
-          Gold Left: {{match[-1]}}
-          <!-- We are giving the user the option to look at the match details for the match they were in  -->
-          <form class="col-12 col-lg-4" action="{{ url_for('.findMatch', summoner_name=summoner_name , match_id=match[-2] ) }}" method="POST" >
-            <input type="submit" class="btn ml-3" value="Match Details" name="submit" style="background-color:#30a7d7"  />
-          </form>
+        <span  class = "col-lg-1 my-auto mx-auto" style="color:{{place_color(participant[0]) }}">
+          <h1 class="" style=""> {{participant[0]}}  </h1>
+          Gold Left: {{participant[-1]}}
           <!-- I think right here I will put a button that lets you look at the match
           It will be a form that has the action url that goes to a new page that has the /username/matchid. -->
         </span>
 
         <!--Printing out the picture of every champion. Getting their picture from the name of the unit in the team -->
         <span class="row col-lg-8" style="">
-          {% for unit,items in zip(match[2],match[3]) %}
+          {% for unit,items in zip(participant[2],participant[3]) %}
           <!--This is position relative that way the position absolute uses this tag as its closest positioned relative. So the absolute tag will be posted with this tag as the absolute -->
            <div class="ml-3" style="position:relative;">
            <!-- I am checking if the name from the 5th charcater up is in the picture name-->
@@ -38,7 +36,7 @@
         </span>
         <span class="row col-lg-3" style="">
          <!--Here I am going to have the traits show with the pictures -->
-         {% for trait in match[1] %}
+         {% for trait in participant[1] %}
            {% if 'Set3' in trait[0] %}
              <img title="{{trait[0][5:]}}" src="{{url_for('static', filename='images/traits/'+lower(trait[0][5:]) + '.png')}}"  alt={{item}} width="40" height="40" align="middle" style="border: 2px solid black;margin-top:1px;top:0px;z-index:2;{{trait_color(trait)}}">
            {% else %}

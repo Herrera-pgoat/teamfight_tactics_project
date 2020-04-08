@@ -68,7 +68,7 @@ def placeHelper(place):
         return (str(place)+'th')
 
 #This function returns the match info to the user
-def gameInfoHelper(last_match_id, id , puuid):
+def gameInfoHelper_callApi(last_match_id, id , puuid):
     #Getting information from the game the played through the api
     apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',last_match_id)
 
@@ -103,7 +103,42 @@ def gameInfoHelper(last_match_id, id , puuid):
     unit_info_list = unit_info_list_and_items[0]
     item_num_list = unit_info_list_and_items[1]
     #now unit_info_list has all relevent information about the units I had in this game
-    return ( user_placement,traits_list,unit_info_list,item_num_list,user_gold_remaining )
+    return ( user_placement,traits_list,unit_info_list,item_num_list,last_match_id,user_gold_remaining )
+
+#This function returns the match info to the user
+def gameInfoHelper_giveApi(summoner_name, puuid,apicall_game_info):
+    #now we are going to do some thing
+    participant_number = 0
+    number = 0
+    for id in apicall_game_info['metadata']['participants']:
+        if id == puuid:
+            participant_number = number
+            break
+        number +=1
+
+    #now with participant_number I have the number that the user is in the list of json thing
+    user_game_info = apicall_game_info['info']['participants'][participant_number]
+
+    #I got my placements in the thing.
+    user_placement = placeHelper(user_game_info['placement'])
+    user_gold_remaining = user_game_info['gold_left']
+
+    #I am going to get the traits I had
+    traits_list = list()
+    for trait in user_game_info['traits']:
+        if(trait['name'] == 'TemplateTrait'):
+            continue
+        #creating a tuple with the information about the trait like how many units the tier I was in the number of tiers
+        trait_info = (trait['name'],trait['num_units'],trait['tier_current'],trait['tier_total'])
+        traits_list.append(trait_info)
+    #traits_list now has all the relevent information
+
+    #calling a function that gets all the informatio about units
+    unit_info_list_and_items = unit_info_helper(user_game_info)
+    unit_info_list = unit_info_list_and_items[0]
+    item_num_list = unit_info_list_and_items[1]
+    #now unit_info_list has all relevent information about the units I had in this game
+    return ( user_placement,traits_list,unit_info_list,item_num_list,summoner_name, user_gold_remaining )
 
 #function that gets returns identification information about the user
 def getUserInfo(username):

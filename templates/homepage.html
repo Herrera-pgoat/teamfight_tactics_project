@@ -21,6 +21,8 @@
   <!--If the user is logged in I will show them the last three matches of the person they followed -->
   {% if g.user and g.user.following_user %}
     <div class="container " style="text-align:center"> Here are the last three TFT games of the user you are following: {{g.user.following_user}} </div>
+    <!-- Setting the summoner name to be the following user that way in the match history we get match details of the person we are follwing  -->
+    {% set summoner_name = g.user.following_user %}
     {% include 'partials/_match_history.html' %}
   {% endif %}
   {% for error in get_flashed_messages() %}
