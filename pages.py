@@ -57,7 +57,7 @@ def mainPage():
         summoner_name,id,account_id,puuid = user_info
 
         #Getting the list of matches they have played through the api call here
-        apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',puuid)
+        apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-5084794a-2f12-467d-9284-d78f9687b09c',puuid)
 
         #if they have no tft games played we give them an error
         if len(apicall_matches_info) == 0:
@@ -159,7 +159,7 @@ def findUser(username):
     summoner_name,id,account_id,puuid = user_info
 
     #Getting the list of matches they have played through the api call here
-    apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',puuid)
+    apicall_matches_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/by-puuid/{}/ids?count=20&api_key=RGAPI-5084794a-2f12-467d-9284-d78f9687b09c',puuid)
 
     #if they have no tft games played we give them an error
     if len(apicall_matches_info) == 0:
@@ -194,7 +194,7 @@ def findMatch(summoner_name,match_id):
 
     #Then with the match id I get the information about everyone in the match.
     #Getting information from the game the played through the api
-    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',match_id)
+    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-5084794a-2f12-467d-9284-d78f9687b09c',match_id)
     summoner_names_list_match = list()
     puuid_list_match = list()
     for puuid in apicall_game_info['metadata']['participants']:
@@ -202,7 +202,7 @@ def findMatch(summoner_name,match_id):
         #I am going through each puuid in the match and am going to get their summoner name as well
         puuid_list_match.append(puuid)
         #I am getting the summoner name of each person in the match
-        summoner_names_list_match.append( apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',puuid)['name'] )
+        summoner_names_list_match.append( apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{}?api_key=RGAPI-5084794a-2f12-467d-9284-d78f9687b09c',puuid)['name'] )
 
     #now I want a list of information where it is sorted by place that contanins all the match information about this game for each person
     #getting the match info for each person by going through each person in the for loop

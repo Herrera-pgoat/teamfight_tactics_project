@@ -1,14 +1,12 @@
 {% for participant in participants_game_info %}
-<!--This is giving me the summoner name that way I know who is who when I look at the match history  -->
-  {{participant[-2]}}
+<!--This is the name of the summoner for each person in the game. Each name is a link to their match history.-->
+  <a href="{{url_for('.findUser',username=participant[-2])}}" >{{participant[-2]}}</a>
   <div class="container-fluid card d-flex mt-1" style="background-color:#9ccFFd;border-left: 8px solid {{place_color(participant[0]) }}">
     <div class="row">
       <!--This will have the placement of the person -->
         <span  class = "col-lg-1 my-auto mx-auto" style="color:{{place_color(participant[0]) }}">
           <h1 class="" style=""> {{participant[0]}}  </h1>
           Gold Left: {{participant[-1]}}
-          <!-- I think right here I will put a button that lets you look at the match
-          It will be a form that has the action url that goes to a new page that has the /username/matchid. -->
         </span>
 
         <!--Printing out the picture of every champion. Getting their picture from the name of the unit in the team -->

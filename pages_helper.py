@@ -70,7 +70,7 @@ def placeHelper(place):
 #This function returns the match info to the user
 def gameInfoHelper_callApi(last_match_id, id , puuid):
     #Getting information from the game the played through the api
-    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',last_match_id)
+    apicall_game_info = apiInfoHelper('https://americas.api.riotgames.com/tft/match/v1/matches/{}?api_key=RGAPI-5084794a-2f12-467d-9284-d78f9687b09c',last_match_id)
 
     #now we are going to do some thing
     participant_number = 0
@@ -143,7 +143,7 @@ def gameInfoHelper_giveApi(summoner_name, puuid,apicall_game_info):
 #function that gets returns identification information about the user
 def getUserInfo(username):
     #Getting user info through the riot api
-    apicall_username_info = apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-87f4e40a-958c-4bfe-8168-92831882408a',username)
+    apicall_username_info = apiInfoHelper('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{}?api_key=RGAPI-5084794a-2f12-467d-9284-d78f9687b09c',username)
     #if there is one thing we have an error and a  one length tuple we return as an error
     if len(apicall_username_info) == 1:
         return (1,)
