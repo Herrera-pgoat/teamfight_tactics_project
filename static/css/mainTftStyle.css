@@ -1,0 +1,17 @@
+.championIcon{
+
+  position:absolute;
+  z-index:2;
+}
+
+.itemIcon{
+  border: 2px solid black;
+  position:relative;
+  z-index:1;
+}
+
+@media screen and (max-width: 600px){
+  .placementNumber {
+      font-size:12px;
+  }
+}

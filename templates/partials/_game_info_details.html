@@ -4,8 +4,8 @@
   <div class="container-fluid card d-flex mt-1" style="background-color:#9ccFFd;border-left: 8px solid {{place_color(participant[0]) }}">
     <div class="row">
       <!--This will have the placement of the person -->
-        <span  class = "col-lg-1 my-auto mx-auto" style="color:{{place_color(participant[0]) }}">
-          <h1 class="" style=""> {{participant[0]}}  </h1>
+        <span  class ="col-lg-1 my-auto mx-auto" style="color:{{place_color(participant[0]) }}">
+          <h1 class="placementNumber" > {{participant[0]}}  </h1>
           Gold Left: {{participant[-1]}}
         </span>
 
@@ -20,19 +20,19 @@
              <!--The z-index tells us we want it to appear above anything with a lower z index. Like in front of not above -->
              <!--I only want as many stars to appear as there are levels the champion has-->
              {% for i in range(0, (unit[-1]) ) %}
-               <img id="level_image" title="" src="{{url_for('static', filename='images/champions/'+lower(unit[0][5:] + '.png'))}}"  alt={{unit[0]}} align="middle" style="left:{{1+15*i}}px;position:absolute;z-index:2;">
+               <img class="championIcon" id="level_image" title="" src="{{url_for('static', filename='images/champions/'+lower(unit[0][5:] + '.png'))}}"  alt={{unit[0]}} align="middle" style="left:{{1+15*i}}px;">
              {% endfor %}
              <!--If I want to print out the items I will have to do it right here in this place  -->
              <div class="" style="display: block;height:{{ (len(items)) * 35 +10}}px" >
                {% for item in items %}
-                 <img id="item_image" src="{{url_for('static', filename='images/items/'+str(item) + '.png')}}"  alt={{item}} width="30" height="30" align="middle" style="border: 2px solid black;margin-top:0px;position:relative;z-index:1;">
+                 <img  class="itemIcon" id="item_image" src="{{url_for('static', filename='images/items/'+str(item) + '.png')}}"  alt={{item}} width="30" height="30" align="middle">
                  <br>
                {% endfor %}
              </div>
              </div>
           {% endfor %}
         </span>
-        <span class="row col-lg-3" style="">
+        <span class="row col-lg-3">
          <!--Here I am going to have the traits show with the pictures -->
          {% for trait in participant[1] %}
            {% if 'Set3' in trait[0] %}
