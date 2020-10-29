@@ -54,7 +54,8 @@ def unit_info_helper(user_game_info):
 
 #this function returns a way for me to go through the json file in python
 def apiInfoHelper(apiLink,id):
-    print ( apiLink.format(id,get_key()) )
+    #I should not be printing the key in the command line 
+    #print ( apiLink.format(id,get_key()) )
     api_response = requests.get(apiLink.format(id,get_key())).text
     return (json.loads(api_response))
 
