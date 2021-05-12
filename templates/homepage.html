@@ -13,17 +13,20 @@
       <form class="nowrap d-flex" action="{{url_for('.findUserHelper')}}" method="POST" style="justify-content: center">
         <input id="home_search" type="text"  class="form-control col-12 col-lg-5 "name='username' placeholder="Find Summoner"/>
         <br>
-        <input id="home_submit" type = "submit" class="btn mr-5" name="submit" value="Search" style="background-color:#30a7d7"/>
+        <input id="home_submit" type = "submit" class="homeBtn btn mr-5" name="submit" value="Search"/>
       </form>
     </div>
 
   </div>
   <!--If the user is logged in I will show them the last three matches of the person they followed -->
   {% if g.user and g.user.following_user %}
-    <div class="container " style="text-align:center"> Here are the last three TFT games of the user you are following: {{g.user.following_user}} </div>
+    <!--The name of the person the user is following is contained here. with id containsUserName -->
+    <div class="container" id="containsUserName" style="text-align:center"> Here are the last three TFT games of the user you are following: {{g.user.following_user}} </div>
     <!-- Setting the summoner name to be the following user that way in the match history we get match details of the person we are follwing  -->
     {% set summoner_name = g.user.following_user %}
     {% include 'partials/_match_history.html' %}
+
+    <input id="load_more" type="submit" class="homeBtn btn" name="loadMore" value="Load More Matches" />
   {% endif %}
   {% for error in get_flashed_messages() %}
     <div class="col-sm-6 container" style="background-color:pink;border: 2px solid red;"> {{error}} </div>
